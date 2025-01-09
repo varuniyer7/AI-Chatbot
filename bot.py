@@ -5,6 +5,7 @@ import os
 from dotenv import load_dotenv
 import re
 import time
+from datetime import datetime
 
 # Load environment variables from .env file
 load_dotenv()
@@ -20,7 +21,15 @@ def is_valid_email(email):
 # Function to send the email to the webhook
 def send_email_to_webhook(email):
     url = os.getenv("url") #Webhook URL
-    data = {"Email": email}  # Payload for the webhook
+    blog_url = st.query_params.get("blog_url", ["test.com"])[0]  # Default to "test.com"
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Current timestamp
+   
+    data = {
+        "Email": email,
+        "BlogURL": blog_url,
+        "Timestamp": timestamp
+    }  # Payload for the webhook
+
     headers = {"Content-Type": "application/json"}
 
     try:
